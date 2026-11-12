@@ -12,7 +12,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const message = process.argv.slice(2).join(" ").trim();
+const argv = process.argv.slice(2);
+const redeploy = argv.includes("--redeploy");
+const message = argv.filter((a) => !a.startsWith("--")).join(" ").trim();
 const LIVE_URL = "https://auditmate-ten.vercel.app";
 const APP_TITLE = "AuditMate";
 
@@ -41,7 +43,7 @@ const scrub = (text) => {
 };
 
 function run(cmd, args, opts = {}) {
-  const r = spawnSync(cmd, args, { cwd: root, encoding: "utf8", env: { ...process.env, ...(opts.env ?? {}) }, maxBuffer: 64 * 1024 * 1024 });
+  const r = spawnSync(cmd, args, { cwd: root, shell: opts.shell ?? false, encoding: "utf8", env: { ...process.env, ...(opts.env ?? {}) }, maxBuffer: 64 * 1024 * 1024 });
   return { status: r.status ?? 1, out: scrub(r.stdout), err: scrub(r.stderr) };
 }
 const git = (...args) => run("git", args);
@@ -55,7 +57,7 @@ const head = git("rev-parse", "HEAD").out.trim();
 const remoteHead = git("ls-remote", "origin", "refs/heads/main").out.split(/\s+/)[0];
 if (!status && head === remoteHead) {
   console.log("바뀐 파일이 없고 GitHub와도 같습니다. 배포만 다시 하려면 `--redeploy`를 쓰세요.");
-  if (!process.argv.includes("--redeploy")) process.exit(0);
+  if (!redeploy) process.exit(0);
 }
 console.log(status ? status : "(커밋할 변경 없음, push·배포만 진행)");
 
@@ -109,7 +111,9 @@ console.log("push 완료");
 
 // ⑥ Vercel 배포
 step(6, "Vercel 프로덕션 배포 (1~2분)");
-const globalRoot = run("npm", ["root", "-g"]).out.trim();
+// Windows에서는 npm이 npm.cmd라서 shell로 실행해야 찾는다. 못 찾으면 기본 전역 폴더(%APPDATA%\npm)를 쓴다
+const npmRoot = run("npm", ["root", "-g"], { shell: true }).out.trim();
+const globalRoot = npmRoot || path.join(process.env.APPDATA ?? "", "npm", "node_modules");
 const vc = process.env.VERCEL_CLI || path.join(globalRoot, "vercel", "dist", "vc.js");
 if (!fs.existsSync(vc)) fail("Vercel CLI가 없습니다. `npm install -g vercel` 후 다시 실행하세요.");
 if (!env.VERCEL_TOKEN) fail(".env에 VERCEL_TOKEN이 없습니다");
