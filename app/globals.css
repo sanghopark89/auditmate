@@ -1,0 +1,758 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #0c1c37;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  /* 외부 글꼴 서버를 쓰지 않고, 컴퓨터에 설치된 한글 글꼴을 순서대로 찾아 쓴다 */
+  --font-sans: "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* ── 화면 디자인 (참조: 짙은 남색 히어로 + 하늘색 강조 + 연회색 바탕 + 영문 대문자 제목 + 둥근 파스텔 카드) ── */
+/* 색: 남색 #0C1C37, 하늘색 #29A7E1, 연회색 #F8F8F8. 글꼴은 설치돼 있으면 Montserrat·Noto Sans KR, 없으면 시스템 한글 글꼴(외부 글꼴 서버 없음) */
+
+:root {
+  --navy: #0c1c37;
+  --sky: #29a7e1;
+  --sky-dark: #1b86b9;
+  --paper: #f8f8f8;
+  --head-font: Montserrat, "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
+}
+
+body {
+  background: var(--paper);
+}
+
+/* 공통 맨 위 띠: 흰 바탕, 왼쪽 이름표 */
+.ui-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px clamp(16px, 4vw, 48px);
+  background: #fff;
+  border-bottom: 1px solid #e8ebf0;
+}
+.ui-brand {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--head-font);
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--navy);
+  letter-spacing: -0.01em;
+}
+.ui-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: var(--sky);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+}
+.ui-topnote {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* 남색 히어로 */
+.ui-hero {
+  background: var(--navy);
+  color: #fff;
+  text-align: center;
+  padding: clamp(56px, 11vh, 120px) clamp(20px, 5vw, 64px) clamp(48px, 9vh, 96px);
+}
+.ui-hero--small {
+  padding: clamp(32px, 6vh, 56px) clamp(20px, 5vw, 64px);
+}
+.ui-title {
+  margin: 0;
+  font-family: var(--head-font);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  font-size: clamp(30px, 5.2vw, 56px);
+  text-transform: uppercase;
+}
+.ui-title em {
+  display: block;
+  font-style: normal;
+  color: var(--sky);
+}
+.ui-hero--small .ui-title {
+  font-size: clamp(24px, 3.4vw, 36px);
+}
+.ui-lede {
+  margin: 22px auto 0;
+  max-width: 560px;
+  font-size: clamp(14px, 1.5vw, 16px);
+  line-height: 1.9;
+  color: #cfd8e6;
+  word-break: keep-all;
+}
+.ui-eyebrow {
+  margin: 0 0 10px;
+  font-family: var(--head-font);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  color: var(--sky);
+  text-transform: uppercase;
+}
+/* 아래로 내려가는 안내 버튼: 가는 원 + 화살표 + 작은 글자. 누르면 점검 세트 고르는 곳으로 이동 */
+.ui-scroll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 40px auto 0;
+  padding: 6px 14px;
+  background: none;
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+  font-family: var(--head-font);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.34em;
+  text-indent: 0.34em;
+}
+.ui-scroll-ring {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  display: grid;
+  place-items: center;
+}
+.ui-scroll:hover .ui-scroll-ring,
+.ui-scroll:focus-visible .ui-scroll-ring {
+  background: var(--sky);
+  border-color: var(--sky);
+}
+.ui-scroll:hover .ui-scroll-label,
+.ui-scroll:focus-visible .ui-scroll-label {
+  color: var(--sky);
+}
+
+/* 영문 대문자 제목 + 한글 부제를 가운데에 두는 섹션 머리말 */
+.ui-sechead {
+  text-align: center;
+  margin: 0 auto 32px;
+}
+.ui-sechead h2 {
+  margin: 0;
+  font-family: var(--head-font);
+  font-weight: 700;
+  font-size: clamp(24px, 3vw, 32px);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+.ui-sechead p {
+  margin: 10px auto 0;
+  max-width: 560px;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #585858;
+  word-break: keep-all;
+}
+.ui-band--sky .ui-sechead h2,
+.ui-band--sky .ui-sechead p {
+  color: #fff;
+}
+
+.ui-band {
+  padding: clamp(48px, 8vh, 88px) clamp(16px, 4vw, 48px);
+}
+.ui-band--paper {
+  background: var(--paper);
+}
+.ui-band--sky {
+  background: var(--sky);
+}
+.ui-wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+/* 파스텔 기능 카드 3장 */
+.ui-features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.ui-feature {
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(12, 28, 55, 0.07);
+  display: flex;
+  flex-direction: column;
+}
+.ui-feature-art {
+  height: 170px;
+  display: grid;
+  place-items: center;
+}
+.ui-feature-art svg {
+  width: 150px;
+  height: 130px;
+}
+.ui-feature-art--mint {
+  background: #d9f6ee;
+}
+.ui-feature-art--blue {
+  background: #d7ecfb;
+}
+.ui-feature-art--peach {
+  background: #fbe6d6;
+}
+.ui-feature-body {
+  padding: 20px 22px 24px;
+}
+.ui-feature-body h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--navy);
+}
+.ui-feature-body p {
+  margin: 8px 0 0;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: #585858;
+  word-break: keep-all;
+}
+
+/* 점검 세트 고르기 카드 (하늘색 띠 안의 흰 카드) */
+.ui-sets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 380px));
+  gap: 20px;
+  justify-content: center;
+}
+.ui-set {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  background: #fff;
+  color: var(--navy);
+  border: 0;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(12, 28, 55, 0.18);
+}
+.ui-set:hover,
+.ui-set:focus-visible {
+  outline: none;
+}
+.ui-set:focus-visible {
+  outline: 3px solid var(--navy);
+  outline-offset: 3px;
+}
+.ui-set-name {
+  font-size: 18px;
+  font-weight: 700;
+}
+.ui-set-summary {
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: #585858;
+  word-break: keep-all;
+}
+.ui-set-files {
+  font-size: 12px;
+  color: #6b7280;
+}
+.ui-set-go {
+  margin-top: auto;
+  padding-top: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--sky-dark);
+}
+
+.ui-footer {
+  background: #333;
+  color: #b8b8b8;
+  font-size: 12px;
+  padding: 24px clamp(16px, 4vw, 48px);
+  text-align: center;
+  line-height: 1.8;
+}
+
+/* 점검 화면: 흰 둥근 카드를 연회색 바탕 위에 쌓는다 */
+.app-main {
+  max-width: 1080px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 28px clamp(16px, 4vw, 48px) 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.app-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: clamp(18px, 3vw, 28px);
+  box-shadow: 0 6px 24px rgba(12, 28, 55, 0.07);
+}
+.app-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--head-font);
+  color: var(--navy);
+}
+.app-step {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--sky);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  flex: none;
+}
+/* 눌러서 쓰는 주 버튼은 남색, 눈에 띄는 안내·강조는 하늘색 */
+.app-card button:not(:disabled):hover {
+  filter: brightness(1.08);
+}
+
+/* 입장 애니메이션이 시작하기 전에 깜박이지 않게 하는 보호는 따로 두지 않는다(애니메이션은 backwards 채움) */
+
+@media (max-width: 860px) {
+  .ui-features {
+    grid-template-columns: 1fr;
+  }
+  .ui-feature {
+    flex-direction: row;
+    align-items: center;
+  }
+  .ui-feature-art {
+    width: 150px;
+    height: auto;
+    align-self: stretch;
+    flex: none;
+  }
+  .ui-feature-art svg {
+    width: 110px;
+    height: 100px;
+  }
+}
+@media (max-width: 560px) {
+  .ui-feature {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .ui-feature-art {
+    width: auto;
+    height: 140px;
+  }
+  .ui-topnote {
+    display: none;
+  }
+}
+
+/* 이름표: 영문 이름 아래에 작게 한글 이름 */
+.ui-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+.ui-brand-text small {
+  font-family: "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: #6b7280;
+  letter-spacing: 0;
+}
+.ui-title--brand {
+  text-transform: none;
+}
+
+/* ── 커서를 올렸을 때의 강조 (떠오르지 않고, 올리는 즉시 색이 차오르고 테두리·줄·화살표가 한 번에 바뀐다) ── */
+:root {
+  --sky-deep: #1678a8;
+}
+
+/* 남색 주 버튼: 하늘색이 왼쪽에서 오른쪽으로 차오른다 */
+button.bg-foreground {
+  background-image: linear-gradient(var(--sky-deep), var(--sky-deep));
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 0% 100%;
+}
+button.bg-foreground:not(:disabled):hover {
+  background-size: 100% 100%;
+}
+
+/* 테두리 버튼: 남색이 차오르고 글자는 흰색으로 */
+button.border:not(.bg-foreground):not(.ui-set) {
+  background-image: linear-gradient(var(--navy), var(--navy));
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 0% 100%;
+}
+button.border:not(.bg-foreground):not(.ui-set):not(:disabled):hover {
+  background-size: 100% 100%;
+  color: #fff;
+  border-color: var(--navy);
+}
+
+/* 글자 버튼(지우기 등): 색이 하늘색으로 바뀌고 밑줄이 또렷해진다 */
+button.underline:not(:disabled):hover {
+  color: var(--sky-deep);
+}
+
+button:focus-visible,
+.ui-set:focus-visible {
+  outline: 3px solid rgba(41, 167, 225, 0.6);
+  outline-offset: 2px;
+}
+
+/* 기능 카드: 아래쪽 하늘색 줄이 왼쪽에서 그어지고 제목이 하늘색으로 */
+.ui-feature {
+  position: relative;
+}
+.ui-feature::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: var(--sky);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.ui-feature:hover::after {
+  transform: scaleX(1);
+}
+.ui-feature:hover {
+  box-shadow: 0 8px 28px rgba(12, 28, 55, 0.12);
+}
+.ui-feature:hover .ui-feature-body h3 {
+  color: var(--sky-deep);
+}
+
+/* 점검 세트 카드: 남색으로 뒤집히고 화살표가 오른쪽으로 밀린다 */
+.ui-set:hover,
+.ui-set:focus-visible {
+  background: var(--navy);
+}
+.ui-set:hover .ui-set-name,
+.ui-set:focus-visible .ui-set-name {
+  color: #fff;
+}
+.ui-set:hover .ui-set-summary,
+.ui-set:focus-visible .ui-set-summary {
+  color: #cfd8e6;
+}
+.ui-set:hover .ui-set-files,
+.ui-set:focus-visible .ui-set-files {
+  color: #8fa0bb;
+}
+.ui-set:hover .ui-set-go,
+.ui-set:focus-visible .ui-set-go {
+  color: var(--sky);
+}
+.ui-set-go {
+  display: inline-block;
+}
+.ui-set:hover .ui-set-go,
+.ui-set:focus-visible .ui-set-go {
+  transform: translateX(6px);
+}
+
+/* 점검 화면 카드: 테두리가 하늘색으로 */
+.app-card {
+  border: 1px solid transparent;
+}
+.app-card:hover {
+  border-color: rgba(41, 167, 225, 0.55);
+}
+
+/* 파일 칸: 올리면 테두리가 하늘색으로 */
+.app-card [class*="rounded-2xl"][class*="border"]:hover {
+  border-color: var(--sky);
+  background-color: rgba(41, 167, 225, 0.05);
+}
+
+/* 결과 표: 줄에 올리면 하늘색 바탕과 왼쪽 막대 */
+.app-card tbody tr:hover {
+  background-color: rgba(41, 167, 225, 0.1);
+  box-shadow: inset 3px 0 0 var(--sky);
+}
+
+
+/* 화면 안 확인 대화상자 */
+.ui-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(12, 28, 55, 0.55);
+}
+.ui-modal {
+  width: min(440px, 100%);
+  padding: 24px;
+  border-radius: 20px;
+  background: #fff;
+  color: var(--navy);
+  box-shadow: 0 20px 60px rgba(12, 28, 55, 0.35);
+}
+.ui-modal p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.75;
+  word-break: keep-all;
+}
+.ui-modal-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* 점검 방식(온라인/오프라인) 선택: 큰 두 칸 중 하나를 고른다 */
+.app-seg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+.app-seg label {
+  position: relative;
+  flex: 1 1 220px;
+  cursor: pointer;
+}
+.app-seg input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+.app-seg span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  height: 100%;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(12, 28, 55, 0.2);
+  background: #fff;
+  color: var(--navy);
+}
+.app-seg small {
+  font-size: 12px;
+  color: #6b7280;
+}
+.app-seg label:hover span {
+  border-color: var(--sky);
+  background: rgba(41, 167, 225, 0.08);
+}
+.app-seg input:checked + span {
+  border-color: var(--navy);
+  background: var(--navy);
+  color: #fff;
+}
+.app-seg input:checked + span small {
+  color: #cfd8e6;
+}
+.app-seg input:focus-visible + span {
+  outline: 3px solid rgba(41, 167, 225, 0.6);
+  outline-offset: 2px;
+}
+.app-seg:disabled {
+  opacity: 0.6;
+}
+
+/* ── 인트로 화면: 남색 바탕에서 로고가 그려지고 이름이 나타난 뒤 사라진다 (Intro.tsx) ── */
+.ui-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  background: var(--navy);
+  color: #fff;
+  cursor: pointer;
+  opacity: 1;
+}
+.ui-intro[data-phase="out"] {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.65s ease;
+}
+.ui-intro-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+.ui-intro-logo {
+  overflow: visible;
+}
+/* 처음 상태는 모두 숨김: 아래 애니메이션이 채워 넣는다 */
+.ui-intro-tile {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.ui-intro-a,
+.ui-intro-check {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+.ui-intro-word {
+  display: flex;
+  font-family: var(--head-font);
+  font-size: clamp(38px, 7vw, 64px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+.ui-intro-word span {
+  display: inline-block;
+  opacity: 0;
+}
+.ui-intro-mate {
+  color: var(--sky);
+}
+.ui-intro-line {
+  display: block;
+  width: 0;
+  height: 2px;
+  background: var(--sky);
+}
+.ui-intro-sub {
+  margin: 0;
+  font-size: clamp(13px, 1.6vw, 16px);
+  letter-spacing: 0.32em;
+  text-indent: 0.32em;
+  color: #cfd8e6;
+  opacity: 0;
+}
+.ui-intro-skip {
+  position: absolute;
+  right: clamp(16px, 3vw, 32px);
+  bottom: clamp(16px, 3vw, 32px);
+  background: none;
+  border: 0;
+  padding: 8px 12px;
+  color: rgba(255, 255, 255, 0.55);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.ui-intro-skip:hover {
+  color: var(--sky);
+}
+
+.ui-intro[data-phase="play"] .ui-intro-tile {
+  animation: intro-tile 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s both;
+}
+.ui-intro[data-phase="play"] .ui-intro-a {
+  animation: intro-draw 0.75s ease-out 0.55s both;
+}
+.ui-intro[data-phase="play"] .ui-intro-check {
+  animation: intro-draw 0.5s ease-out 1.2s both;
+}
+.ui-intro[data-phase="play"] .ui-intro-word span {
+  animation: intro-rise 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) calc(1.45s + var(--i) * 0.06s) both;
+}
+.ui-intro[data-phase="play"] .ui-intro-line {
+  animation: intro-line 0.7s ease-out 2.1s both;
+}
+.ui-intro[data-phase="play"] .ui-intro-sub {
+  animation: intro-fade 0.7s ease-out 2.3s both;
+}
+@keyframes intro-tile {
+  from {
+    opacity: 0;
+    transform: scale(0.55);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes intro-draw {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes intro-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes intro-line {
+  from {
+    width: 0;
+  }
+  to {
+    width: 120px;
+  }
+}
+@keyframes intro-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
