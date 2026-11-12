@@ -8,7 +8,8 @@
     "start": "node node_modules/next/dist/bin/next start",
     "lint": "node node_modules/eslint/bin/eslint.js",
     "sample-data": "node scripts/make-sample-data.mjs",
-    "package:offline": "node scripts/make-offline-package.mjs"
+    "package:offline": "node scripts/make-offline-package.mjs",
+    "ship": "node scripts/ship.mjs"
   },
   "dependencies": {
     "next": "16.4.6",
