@@ -1,8 +1,9 @@
 // 수정 내용을 GitHub에 올리고 Vercel에 다시 배포한 뒤, 잘 올라갔는지 확인한다.
 // 사용: npm run ship -- "무엇을 왜 바꿨는지 한 줄 (한국어)"
 //
-// 순서: ① 바뀐 파일 확인 → ② 타입 검사·코드 검사 → ③ 비밀 값·금지 파일 검사 → ④ 커밋 → ⑤ GitHub push
-//       → ⑥ Vercel 프로덕션 배포 → ⑦ GitHub·배포 주소 확인
+// 순서: ① 바뀐 파일 확인 → ② 타입 검사·코드 검사 → ③ 비밀 값·금지 파일 검사 → ④ 업무망 반입용 폴더(offline-package) 다시 만들기
+//       → ⑤ 커밋 → ⑥ GitHub push → ⑦ Vercel 프로덕션 배포 → ⑧ GitHub·배포 주소 확인
+// (offline-package는 저장소에 올리지 않는 빌드 결과다. 기능이 바뀌면 같이 새로 만들어 두려고 매번 다시 만든다. 건너뛰려면 --skip-package)
 // 하나라도 실패하면 거기서 멈춘다(검사에 실패한 채로는 올리지 않는다). 토큰·키 값은 화면에 출력하지 않는다.
 // GitHub는 .env의 GITHUB_TOKEN, Vercel은 VERCEL_TOKEN을 쓴다. Vercel CLI는 컴퓨터에 전역 설치(npm i -g vercel)돼 있어야 한다.
 
@@ -18,7 +19,7 @@ const message = argv.filter((a) => !a.startsWith("--")).join(" ").trim();
 const LIVE_URL = "https://auditmate-ten.vercel.app";
 const APP_TITLE = "AuditMate";
 
-const step = (n, text) => console.log(`\n[${n}/7] ${text}`);
+const step = (n, text) => console.log(`\n[${n}/8] ${text}`);
 const fail = (text) => {
   console.error(`\n✖ 중단: ${text}`);
   process.exit(1);
@@ -88,8 +89,18 @@ for (const p of patterns) {
 }
 console.log(`통과: 올라갈 파일 ${staged.length}개, 비밀 값 0건, 금지 경로 0건`);
 
-// ④ 커밋
-step(4, "커밋");
+// ④ 업무망 반입용 폴더
+step(4, "업무망 반입용 폴더(offline-package) 다시 만들기");
+if (argv.includes("--skip-package")) {
+  console.log("건너뜀(--skip-package)");
+} else {
+  const pkg = node(path.join(root, "scripts/make-offline-package.mjs"));
+  if (pkg.status !== 0) fail("반입용 폴더 만들기 실패: " + (pkg.out + pkg.err).slice(-1200));
+  console.log((pkg.out.trim().split(/\r?\n/).pop() ?? "").trim() || "완료");
+}
+
+// ⑤ 커밋
+step(5, "커밋");
 if (git("status", "--short").out.trim()) {
   const name = git("log", "-1", "--format=%an").out.trim() || "sanghopark89";
   const email = git("log", "-1", "--format=%ae").out.trim();
@@ -101,16 +112,16 @@ if (git("status", "--short").out.trim()) {
   console.log("새로 커밋할 내용 없음");
 }
 
-// ⑤ push
-step(5, "GitHub push");
+// ⑥ push
+step(6, "GitHub push");
 if (!env.GITHUB_TOKEN) fail(".env에 GITHUB_TOKEN이 없습니다");
 const b64 = Buffer.from(`x-access-token:${env.GITHUB_TOKEN}`).toString("base64");
 const push = git("-c", `http.extraheader=Authorization: Basic ${b64}`, "push", "-q", "origin", "main");
 if (push.status !== 0) fail("push 실패\n" + (push.out + push.err).slice(0, 800));
 console.log("push 완료");
 
-// ⑥ Vercel 배포
-step(6, "Vercel 프로덕션 배포 (1~2분)");
+// ⑦ Vercel 배포
+step(7, "Vercel 프로덕션 배포 (1~2분)");
 // Windows에서는 npm이 npm.cmd라서 shell로 실행해야 찾는다. 못 찾으면 기본 전역 폴더(%APPDATA%\npm)를 쓴다
 const npmRoot = run("npm", ["root", "-g"], { shell: true }).out.trim();
 const globalRoot = npmRoot || path.join(process.env.APPDATA ?? "", "npm", "node_modules");
@@ -123,8 +134,8 @@ if (deploy.status !== 0) fail("배포 실패\n" + deployText.slice(-1500));
 const ready = deployText.match(/Deployment ([^\s]+) ready\. Production URL: (https:\/\/[^\s"]+)/);
 console.log(ready ? `배포 완료: ${ready[1]}` : "배포 명령은 성공했습니다.");
 
-// ⑦ 확인
-step(7, "GitHub·배포 주소 확인");
+// ⑧ 확인
+step(8, "GitHub·배포 주소 확인");
 const after = git("ls-remote", "origin", "refs/heads/main").out.split(/\s+/)[0];
 const localHead = git("rev-parse", "HEAD").out.trim();
 const githubOk = after === localHead;

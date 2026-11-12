@@ -11,13 +11,19 @@ import Intro from "./Intro";
 
 export default function AuditShell() {
   const [checkSet, setCheckSet] = useState<CheckSetInfo | null>(null);
+  // 첫 화면의 AuditMate 로고를 누르면 올라가는 번호: 인트로를 새로 만들어(key) 처음부터 다시 보여 준다
+  const [introRun, setIntroRun] = useState(0);
+  const replayIntro = () => {
+    window.scrollTo({ top: 0 });
+    setIntroRun((n) => n + 1);
+  };
   return (
     <>
-      <Intro />
+      <Intro key={introRun} replay={introRun > 0} />
       {checkSet ? (
         <AuditApp key={checkSet.id} checkSet={checkSet} onBack={() => setCheckSet(null)} />
       ) : (
-        <CheckSetPicker onPick={setCheckSet} />
+        <CheckSetPicker onPick={setCheckSet} onLogo={replayIntro} />
       )}
     </>
   );

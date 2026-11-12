@@ -18,7 +18,8 @@ type Phase = "pending" | "play" | "out" | "done";
 const WORD_AUDIT = [..."Audit"];
 const WORD_MATE = [..."Mate"];
 
-export default function Intro() {
+/** replay가 true면 "한 번만 보여 주기" 기록을 무시하고 인트로를 다시 처음부터 보여 준다 (로고를 눌렀을 때) */
+export default function Intro({ replay = false }: { replay?: boolean }) {
   const [phase, setPhase] = useState<Phase>("pending");
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export default function Intro() {
         } catch {
           /* 저장소를 못 써도 인트로는 그대로 보여 준다 */
         }
-        if (seen || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        if ((seen && !replay) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
           setPhase("done");
           return;
         }
@@ -46,7 +47,7 @@ export default function Intro() {
       }, 0),
     );
     return () => timers.forEach(clearTimeout);
-  }, []);
+  }, [replay]);
 
   // 건너뛰기: 아무 키나 누르면 바로 넘어간다
   useEffect(() => {

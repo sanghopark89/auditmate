@@ -11,6 +11,8 @@ import { JudgeIcon, ReportIcon, ShieldIcon } from "./LandingIcons";
 
 interface Props {
   onPick: (checkSet: CheckSetInfo) => void;
+  /** 왼쪽 위 AuditMate 로고를 눌렀을 때 (인트로를 다시 보여 준다) */
+  onLogo?: () => void;
 }
 
 const FEATURES: { title: string; text: string; icon: ReactNode; tone: "mint" | "blue" | "peach" }[] = [
@@ -68,7 +70,7 @@ function scrollToCheckSet() {
   document.getElementById("check-set")?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
 }
 
-export default function CheckSetPicker({ onPick }: Props) {
+export default function CheckSetPicker({ onPick, onLogo }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -80,7 +82,7 @@ export default function CheckSetPicker({ onPick }: Props) {
   return (
     <div ref={rootRef} className="flex flex-1 flex-col">
       <header className="ui-topbar">
-        <Brand />
+        <Brand onClick={onLogo} />
         <span className="ui-topnote">파일은 브라우저 안에서만 읽습니다</span>
       </header>
 
