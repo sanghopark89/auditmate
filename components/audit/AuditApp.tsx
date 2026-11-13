@@ -339,7 +339,7 @@ export default function AuditApp({ checkSet, onBack }: AuditAppProps) {
                 </button>
               )}
               <span className="text-xs text-foreground/60">
-                가상 데이터(대부계약 1,000건·실태조사 3,606건)를 두 칸에 넣어 바로 시험해 볼 수 있습니다. [대응표 샘플 넣기]는 이 샘플을 AI로 분류해 만든 대응표를 넣습니다(오프라인 방식 시험용). 실제 자료가 아닙니다.
+                시험용 샘플 데이터(가상 데이터 또는 개인정보를 지운 데이터)를 두 칸에 넣어 바로 시험해 볼 수 있습니다. [대응표 샘플 넣기]는 샘플에 맞는 대응표를 대응표 칸에 넣습니다(오프라인 방식 시험용). 실제 점검 자료가 아닙니다.
               </span>
             </div>
           )}
