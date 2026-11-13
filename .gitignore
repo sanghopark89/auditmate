@@ -50,3 +50,6 @@ next-env.d.ts
 
 # 업무망 반입용 폴더(빌드 결과)
 /offline-package/
+
+# 강의 핸드북을 정리한 개인 학습 요약(공개 저장소에 올리지 않는다)
+/docs/VibeCoding_*
