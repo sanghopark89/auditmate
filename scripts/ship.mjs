@@ -91,12 +91,21 @@ console.log(`통과: 올라갈 파일 ${staged.length}개, 비밀 값 0건, 금�
 
 // ④ 업무망 반입용 폴더
 step(4, "업무망 반입용 폴더(offline-package) 다시 만들기");
+let packageWarning = "";
 if (argv.includes("--skip-package")) {
   console.log("건너뜀(--skip-package)");
 } else {
   const pkg = node(path.join(root, "scripts/make-offline-package.mjs"));
-  if (pkg.status !== 0) fail("반입용 폴더 만들기 실패: " + (pkg.out + pkg.err).slice(-1200));
-  console.log((pkg.out.trim().split(/\r?\n/).pop() ?? "").trim() || "완료");
+  const pkgText = pkg.out + pkg.err;
+  if (pkg.status !== 0 && /EBUSY|EPERM|resource busy|locked/i.test(pkgText)) {
+    // 반입용 폴더를 다른 프로그램(예: 실행 중인 node server.js, 탐색기)이 잡고 있으면 갱신만 건너뛰고 배포는 계속한다
+    packageWarning = "offline-package를 다른 프로그램이 사용 중이라 갱신하지 못했습니다. 실행 중인 서버(실행.bat)를 끄고 `npm run package:offline`을 다시 실행하세요.";
+    console.log("⚠️ " + packageWarning);
+  } else if (pkg.status !== 0) {
+    fail("반입용 폴더 만들기 실패: " + pkgText.slice(-1200));
+  } else {
+    console.log((pkg.out.trim().split(/\r?\n/).pop() ?? "").trim() || "완료");
+  }
 }
 
 // ⑤ 커밋
@@ -153,4 +162,5 @@ for (let i = 0; i < 6 && !liveOk; i++) {
   if (!liveOk) await new Promise((r) => setTimeout(r, 5000));
 }
 console.log(`\n결과: GitHub ${githubOk ? "✅" : "❌"} / 배포 ${liveOk ? "✅" : "❌"}  →  ${LIVE_URL}`);
+if (packageWarning) console.log("⚠️ " + packageWarning);
 process.exit(githubOk && liveOk ? 0 : 1);

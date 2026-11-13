@@ -8,7 +8,7 @@ import type { Slot } from "./pipeline";
 
 /** 샘플 파일: 칸 → 내려받을 주소 후보(public/samples). sample-loader.ts가 앞에서부터 시도한다 */
 export interface CheckSetSample {
-  slot: Exclude<Slot, "mapping">;
+  slot: Slot;
   /** 브라우저가 가져올 주소 후보 (앞에서부터 시도) */
   urls: string[];
   /** 칸에 올린 것으로 보여줄 파일 이름 */
@@ -22,8 +22,10 @@ export interface CheckSetInfo {
   summary: string;
   /** 필요한 파일 목록 (카드에 보여준다) */
   inputs: string[];
-  /** 누르면 자동으로 넣어 주는 가상 샘플 파일 */
+  /** 누르면 자동으로 넣어 주는 가상 샘플 파일 (두 보고서) */
   samples: CheckSetSample[];
+  /** 누르면 대응표 칸에 자동으로 넣어 주는 샘플 대응표 (위 샘플을 AI로 분류해 만든 것) */
+  mappingSample?: CheckSetSample;
 }
 
 /**
@@ -44,5 +46,10 @@ export const CHECKSETS: readonly CheckSetInfo[] = [
       { slot: "lease", urls: sampleUrls("lease.xlsx", new URL("../../public/samples/lease.xlsx", import.meta.url).href), fileName: "lease.xlsx" },
       { slot: "survey", urls: sampleUrls("survey.xlsx", new URL("../../public/samples/survey.xlsx", import.meta.url).href), fileName: "survey.xlsx" },
     ],
+    mappingSample: {
+      slot: "mapping",
+      urls: sampleUrls("mapping.xlsx", new URL("../../public/samples/mapping.xlsx", import.meta.url).href),
+      fileName: "대응표_샘플.xlsx",
+    },
   },
 ];

@@ -207,6 +207,18 @@ export default function AuditApp({ checkSet, onBack }: AuditAppProps) {
     }
   }
 
+  /** 샘플 대응표를 대응표 칸에 자동으로 넣는다 (대응표 샘플은 위 가상 샘플 두 파일에 맞춰 만든 것이다) */
+  async function handleMappingSample() {
+    const sample = checkSet.mappingSample;
+    if (!sample) return;
+    setSampleError(null);
+    try {
+      await handleFile("mapping", await loadSampleFile(sample));
+    } catch (e) {
+      setSampleError(e instanceof Error ? e.message : "샘플 대응표를 넣지 못했습니다");
+    }
+  }
+
   async function handleClear(slot: Slot) {
     setResult(null);
     setRunError(null);
@@ -316,8 +328,18 @@ export default function AuditApp({ checkSet, onBack }: AuditAppProps) {
               >
                 샘플 파일 자동으로 넣기
               </button>
+              {checkSet.mappingSample && (
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => void handleMappingSample()}
+                  className="rounded-md border border-foreground/40 px-3 py-1.5 text-sm disabled:opacity-40"
+                >
+                  대응표 샘플 넣기
+                </button>
+              )}
               <span className="text-xs text-foreground/60">
-                가상 데이터(대부계약 1,000건·실태조사 3,606건)를 두 칸에 넣어 바로 시험해 볼 수 있습니다. 실제 자료가 아닙니다.
+                가상 데이터(대부계약 1,000건·실태조사 3,606건)를 두 칸에 넣어 바로 시험해 볼 수 있습니다. [대응표 샘플 넣기]는 이 샘플을 AI로 분류해 만든 대응표를 넣습니다(오프라인 방식 시험용). 실제 자료가 아닙니다.
               </span>
             </div>
           )}
