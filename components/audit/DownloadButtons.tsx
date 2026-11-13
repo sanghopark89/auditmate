@@ -50,7 +50,7 @@ export default function DownloadButtons({ makeResult, makeMapping }: Props) {
           type="button"
           disabled={busy !== null}
           onClick={() => void download("result")}
-          className="rounded-full bg-foreground px-5 py-2 text-sm text-background disabled:opacity-40"
+          className="ui-btn px-5 py-2 text-sm"
         >
           {busy === "result" ? "엑셀 만드는 중…" : "결과 엑셀 내려받기"}
         </button>
@@ -58,7 +58,7 @@ export default function DownloadButtons({ makeResult, makeMapping }: Props) {
           type="button"
           disabled={busy !== null}
           onClick={() => void download("mapping")}
-          className="rounded-full border border-foreground/40 px-5 py-2 text-sm disabled:opacity-40"
+          className="ui-btn px-5 py-2 text-sm"
         >
           {busy === "mapping" ? "엑셀 만드는 중…" : "대응표 엑셀 내려받기"}
         </button>

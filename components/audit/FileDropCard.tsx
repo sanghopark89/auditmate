@@ -96,7 +96,7 @@ export default function FileDropCard({ title, hint, optional, state, disabled, o
           type="button"
           disabled={disabled}
           onClick={() => inputRef.current?.click()}
-          className="rounded-md border border-foreground/30 px-3 py-1.5 text-sm hover:bg-foreground/5 disabled:opacity-50"
+          className="ui-btn px-3 py-1.5 text-sm"
         >
           {state.fileName ? "다른 파일 고르기" : "파일 고르기"}
         </button>

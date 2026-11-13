@@ -47,10 +47,10 @@ export function useConfirm(): { ask: (message: string, confirmLabel?: string) =>
       <div className="ui-modal" role="alertdialog" aria-modal="true" aria-label="확인" onClick={(e) => e.stopPropagation()}>
         <p>{pending.message}</p>
         <div className="ui-modal-actions">
-          <button type="button" className="rounded-full border border-foreground/30 px-5 py-2 text-sm" onClick={() => close(false)}>
+          <button type="button" className="ui-btn px-5 py-2 text-sm" onClick={() => close(false)}>
             취소
           </button>
-          <button ref={okRef} type="button" className="rounded-full bg-foreground px-5 py-2 text-sm font-medium text-background" onClick={() => close(true)}>
+          <button ref={okRef} type="button" className="ui-btn px-5 py-2 text-sm font-medium" onClick={() => close(true)}>
             {pending.confirmLabel}
           </button>
         </div>

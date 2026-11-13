@@ -56,9 +56,7 @@ export default function ResultTable({ counts, load }: Props) {
               setFilter(f);
               setPage(1);
             }}
-            className={`rounded-md border px-3 py-1.5 text-sm ${
-              f === filter ? "border-foreground bg-foreground text-background" : "border-foreground/30 hover:bg-foreground/5"
-            }`}
+            className={`ui-btn px-3 py-1.5 text-sm ${f === filter ? "" : "ui-btn--ghost"}`}
           >
             {f} {fmt(counts[f])}건
           </button>
@@ -116,7 +114,7 @@ export default function ResultTable({ counts, load }: Props) {
                 type="button"
                 disabled={showing.page <= 1}
                 onClick={() => setPage(showing.page - 1)}
-                className="rounded-md border border-foreground/30 px-3 py-1 disabled:opacity-40"
+                className="ui-btn px-3 py-1"
               >
                 이전
               </button>
@@ -127,7 +125,7 @@ export default function ResultTable({ counts, load }: Props) {
                 type="button"
                 disabled={showing.page >= showing.pageCount}
                 onClick={() => setPage(showing.page + 1)}
-                className="rounded-md border border-foreground/30 px-3 py-1 disabled:opacity-40"
+                className="ui-btn px-3 py-1"
               >
                 다음
               </button>

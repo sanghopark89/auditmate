@@ -296,7 +296,7 @@ export default function AuditApp({ checkSet, onBack }: AuditAppProps) {
           type="button"
           disabled={busy}
           onClick={() => void goMain()}
-          className="rounded-full border border-foreground/25 px-4 py-1.5 text-sm hover:bg-foreground/5 disabled:opacity-40"
+          className="ui-btn px-4 py-1.5 text-sm"
         >
           Main
         </button>
@@ -324,7 +324,7 @@ export default function AuditApp({ checkSet, onBack }: AuditAppProps) {
                 type="button"
                 disabled={busy}
                 onClick={() => void handleSample()}
-                className="rounded-md border border-foreground/40 px-3 py-1.5 text-sm disabled:opacity-40"
+                className="ui-btn px-3 py-1.5 text-sm"
               >
                 샘플 파일 자동으로 넣기
               </button>
@@ -333,7 +333,7 @@ export default function AuditApp({ checkSet, onBack }: AuditAppProps) {
                   type="button"
                   disabled={busy}
                   onClick={() => void handleMappingSample()}
-                  className="rounded-md border border-foreground/40 px-3 py-1.5 text-sm disabled:opacity-40"
+                  className="ui-btn px-3 py-1.5 text-sm"
                 >
                   대응표 샘플 넣기
                 </button>
@@ -399,7 +399,7 @@ export default function AuditApp({ checkSet, onBack }: AuditAppProps) {
             type="button"
             disabled={!canRun}
             onClick={() => void handleRun()}
-            className="mt-3 rounded-full bg-foreground px-7 py-2.5 font-medium text-background disabled:opacity-40"
+            className="mt-3 ui-btn px-7 py-2.5 font-medium"
           >
             {running ? "점검 중…" : "점검 실행"}
           </button>

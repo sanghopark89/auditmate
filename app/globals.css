@@ -351,10 +351,6 @@ body {
   font-weight: 700;
   flex: none;
 }
-/* 눌러서 쓰는 주 버튼은 남색, 눈에 띄는 안내·강조는 하늘색 */
-.app-card button:not(:disabled):hover {
-  filter: brightness(1.08);
-}
 
 /* 입장 애니메이션이 시작하기 전에 깜박이지 않게 하는 보호는 따로 두지 않는다(애니메이션은 backwards 채움) */
 
@@ -413,28 +409,34 @@ body {
   --sky-deep: #1678a8;
 }
 
-/* 남색 주 버튼: 하늘색이 왼쪽에서 오른쪽으로 차오른다 */
-button.bg-foreground {
+/* 모든 동작 버튼은 남색으로 통일: 커서를 올리면 하늘색이 왼쪽에서 오른쪽으로 차오른다 */
+.ui-btn {
+  border-radius: 9999px;
+  border: 1px solid var(--navy);
+  background-color: var(--navy);
   background-image: linear-gradient(var(--sky-deep), var(--sky-deep));
   background-repeat: no-repeat;
   background-position: left center;
   background-size: 0% 100%;
-}
-button.bg-foreground:not(:disabled):hover {
-  background-size: 100% 100%;
-}
-
-/* 테두리 버튼: 남색이 차오르고 글자는 흰색으로 */
-button.border:not(.bg-foreground):not(.ui-set) {
-  background-image: linear-gradient(var(--navy), var(--navy));
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-size: 0% 100%;
-}
-button.border:not(.bg-foreground):not(.ui-set):not(:disabled):hover {
-  background-size: 100% 100%;
   color: #fff;
-  border-color: var(--navy);
+  cursor: pointer;
+  transition: background-size 0.25s ease, border-color 0.25s ease;
+}
+.ui-btn:not(:disabled):hover {
+  background-size: 100% 100%;
+  border-color: var(--sky-deep);
+}
+/* 선택되지 않은 탭: 흰 바탕 남색 글자, 올리면 남색으로 */
+.ui-btn--ghost {
+  background-color: #fff;
+  color: var(--navy);
+}
+.ui-btn--ghost:not(:disabled):hover {
+  color: #fff;
+}
+.ui-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 /* 글자 버튼(지우기 등): 색이 하늘색으로 바뀌고 밑줄이 또렷해진다 */
