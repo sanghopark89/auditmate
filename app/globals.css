@@ -409,29 +409,27 @@ body {
   --sky-deep: #1678a8;
 }
 
-/* 모든 동작 버튼은 남색으로 통일: 커서를 올리면 하늘색이 왼쪽에서 오른쪽으로 차오른다 */
+/* 모든 동작 버튼은 남색으로 통일: 커서를 올리면 즉시 하늘색으로 바뀐다(스르륵 효과 없음) */
 .ui-btn {
   border-radius: 9999px;
   border: 1px solid var(--navy);
   background-color: var(--navy);
-  background-image: linear-gradient(var(--sky-deep), var(--sky-deep));
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-size: 0% 100%;
   color: #fff;
   cursor: pointer;
-  transition: background-size 0.25s ease, border-color 0.25s ease;
+  transition: none;
 }
 .ui-btn:not(:disabled):hover {
-  background-size: 100% 100%;
+  background-color: var(--sky-deep);
   border-color: var(--sky-deep);
 }
-/* 선택되지 않은 탭: 흰 바탕 남색 글자, 올리면 남색으로 */
+
+/* 선택되지 않은 탭: 흰 바탕 남색 글자, 올리면 즉시 하늘색으로 */
 .ui-btn--ghost {
   background-color: #fff;
   color: var(--navy);
 }
 .ui-btn--ghost:not(:disabled):hover {
+  background-color: var(--sky-deep);
   color: #fff;
 }
 .ui-btn:disabled {
