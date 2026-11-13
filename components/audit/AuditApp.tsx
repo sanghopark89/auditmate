@@ -12,6 +12,7 @@ import type { InspectSummary, ResultFilter, RunProgress, RunSummary, Slot, Uploa
 import { AuditWorkerClient } from "@/lib/audit/worker-client";
 import Brand, { APP_NAME } from "./Brand";
 import { useConfirm } from "./ConfirmDialog";
+import { loadSampleFile } from "@/lib/audit/sample-loader";
 import FileDropCard, { EMPTY_CARD, type FileCardState } from "./FileDropCard";
 import NoticeBox from "./NoticeBox";
 import DownloadButtons from "./DownloadButtons";
@@ -198,13 +199,8 @@ export default function AuditApp({ checkSet, onBack }: AuditAppProps) {
   async function handleSample() {
     setSampleError(null);
     try {
-      const files = await Promise.all(
-        checkSet.samples.map(async (s) => {
-          const res = await fetch(s.url);
-          if (!res.ok) throw new Error("샘플 파일을 가져오지 못했습니다");
-          return { slot: s.slot, file: new File([await res.blob()], s.fileName) };
-        }),
-      );
+      // 어디서 실행하든 가져오도록 후보 주소를 차례로 시도한다 (sample-loader.ts)
+      const files = await Promise.all(checkSet.samples.map(async (s) => ({ slot: s.slot, file: await loadSampleFile(s) })));
       for (const { slot, file } of files) await handleFile(slot, file);
     } catch (e) {
       setSampleError(e instanceof Error ? e.message : "샘플 파일을 넣지 못했습니다");

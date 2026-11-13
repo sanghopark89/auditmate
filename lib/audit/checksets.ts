@@ -6,11 +6,11 @@
 
 import type { Slot } from "./pipeline";
 
-/** 샘플 파일: 칸 → 내려받을 주소(public/samples) */
+/** 샘플 파일: 칸 → 내려받을 주소 후보(public/samples). sample-loader.ts가 앞에서부터 시도한다 */
 export interface CheckSetSample {
   slot: Exclude<Slot, "mapping">;
-  /** 브라우저가 가져올 주소 */
-  url: string;
+  /** 브라우저가 가져올 주소 후보 (앞에서부터 시도) */
+  urls: string[];
   /** 칸에 올린 것으로 보여줄 파일 이름 */
   fileName: string;
 }
@@ -26,6 +26,14 @@ export interface CheckSetInfo {
   samples: CheckSetSample[];
 }
 
+/**
+ * 샘플 주소 후보 만들기. 첫 번째는 앱과 함께 빌드된 파일의 주소(어디서 실행해도 앱 스크립트를 따라간다),
+ * 이어서 현재 페이지 기준 상대 주소, 사이트 맨 위 기준 절대 주소를 시도한다.
+ */
+function sampleUrls(fileName: string, bundled: string): string[] {
+  return [...new Set([bundled, `samples/${fileName}`, `/samples/${fileName}`])];
+}
+
 export const CHECKSETS: readonly CheckSetInfo[] = [
   {
     id: "lease-purpose",
@@ -33,8 +41,8 @@ export const CHECKSETS: readonly CheckSetInfo[] = [
     summary: "대부계약 현황과 실태조사 내역을 대장번호로 대조해, 실제 이용현황이 대부목적과 맞는지 점검합니다.",
     inputs: ["대부계약 현황 통계 보고서", "최근 실태조사 내역 현황 통계 보고서", "대응표 (선택)"],
     samples: [
-      { slot: "lease", url: "/samples/lease.xlsx", fileName: "lease.xlsx" },
-      { slot: "survey", url: "/samples/survey.xlsx", fileName: "survey.xlsx" },
+      { slot: "lease", urls: sampleUrls("lease.xlsx", new URL("../../public/samples/lease.xlsx", import.meta.url).href), fileName: "lease.xlsx" },
+      { slot: "survey", urls: sampleUrls("survey.xlsx", new URL("../../public/samples/survey.xlsx", import.meta.url).href), fileName: "survey.xlsx" },
     ],
   },
 ];
